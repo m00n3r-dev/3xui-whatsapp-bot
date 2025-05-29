@@ -24,7 +24,7 @@ export async function fetchWithCookies(url: string, options: any = {}) {
   return response;
 }
 
-async function doLogin() {
+export async function doLogin() {
   const loginRes = await fetchWithCookies(`https://${Bun.env.HOST}:${Bun.env.PORT}/login`, {
     method: "POST",
     headers: {

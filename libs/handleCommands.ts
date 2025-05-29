@@ -1,13 +1,15 @@
 import type { Message } from "whatsapp-web.js";
-import { fetchWithAutoLogin } from "./apiWrapper";
+import { doLogin, fetchWithAutoLogin } from "./apiWrapper";
 let args: string[] = [];
+
+let tryCount = 0;
 
 // Define command handlers
 const handleInfo = async (message: Message) => {
   if (args.length < 2) {
     message.reply("Usage: !info <username>");
     return;
-  };
+  }
 
   try {
     const dataRes = await fetchWithAutoLogin(
@@ -36,6 +38,15 @@ const handleInfo = async (message: Message) => {
     const messageContent = `*Username:* ${args[1]}\n*Expiry Date:* ${expireDate}\n*Total Traffic:* ${total} GB\n*Upload:* ${upload} GB\n*Download:* ${download} GB\n*Remaining:* ${remaining} GB`;
     message.reply(messageContent);
   } catch (error) {
+    if (tryCount == 0) {
+      tryCount++;
+      await doLogin();
+      handleInfo(message);
+      return;
+    }
+
+    tryCount = 0;
+
     console.error("Error handling info command:", error);
     message.reply("An error occurred while processing the info command.");
   }
