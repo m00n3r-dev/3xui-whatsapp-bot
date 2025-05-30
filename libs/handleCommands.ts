@@ -34,7 +34,7 @@ const handleInfo = async (message: Message) => {
       data.obj.total == 0
         ? "♾️"
         : bytesToGB(data.obj.total - (data.obj.up + data.obj.down));
-
+    tryCount = 0;
     const messageContent = `*Username:* ${args[1]}\n*Expiry Date:* ${expireDate}\n*Total Traffic:* ${total} GB\n*Upload:* ${upload} GB\n*Download:* ${download} GB\n*Remaining:* ${remaining} GB`;
     message.reply(messageContent);
   } catch (error) {
